@@ -34,31 +34,23 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Merge<A, B> = {
-  [P in keyof A | keyof B]: P extends keyof A
-    ? A[P]
-    : P extends keyof B
-    ? B[P]
-    : never;
-};
-type MyReadonly2<T, K extends keyof T | undefined = undefined> = Equal<
-  K,
-  undefined
-> extends true
-  ? Readonly<T>
-  : Merge<
-      {
-        [Property in Exclude<keyof T, K>]: T[Property];
-      },
-      {
-        readonly [ReadonlyProperty in Exclude<
-          K,
-          undefined
-        >]: T[ReadonlyProperty];
-      }
-    >;
+// initial solution
+// type MyReadonly2<T, K extends keyof T | undefined = undefined> = Equal<K, undefined> extends true
+//   ? Readonly<T>
+//   : { readonly [RoP in keyof T as Extract<RoP,K>]: T[RoP] } & { [P in keyof T as Exclude<P, K>]: T[P] }
 
-type a = MyReadonly2<Todo1, 'title' | 'description'>;
+// cleaned up
+type MyReadonly2<T, K extends keyof T = keyof T> = { readonly [RoP in keyof T as Extract<RoP,K>]: T[RoP] } & { [P in keyof T as Exclude<P, K>]: T[P] }
+
+
+// this doesn't work because optional property is not preserved
+type IncorrectReadonly2<T, K extends keyof T = keyof T> = { readonly [RoP in Extract<keyof T,K>]: T[RoP] } & { [P in Exclude<keyof T, K>]: T[P] }
+
+type a = MyReadonly2<Todo1, 'title' | 'description'>
+type b = IncorrectReadonly2<Todo1, 'title' | 'description'>
+
+// cleaner solution
+// type MyReadonly2<T, K extends keyof T = keyof T> = Omit<T, K> & Readonly<T>;
 
 /* _____________ Test Cases _____________ */
 import type { Alike, Equal, Expect } from '@type-challenges/utils';
