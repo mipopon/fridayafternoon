@@ -40,17 +40,19 @@
 //   : { readonly [RoP in keyof T as Extract<RoP,K>]: T[RoP] } & { [P in keyof T as Exclude<P, K>]: T[P] }
 
 // cleaned up
-type MyReadonly2<T, K extends keyof T = keyof T> = { readonly [RoP in keyof T as Extract<RoP,K>]: T[RoP] } & { [P in keyof T as Exclude<P, K>]: T[P] }
+// type MyReadonly2<T, K extends keyof T = keyof T> = { readonly [RoP in keyof T as Extract<RoP,K>]: T[RoP] } & { [P in keyof T as Exclude<P, K>]: T[P] }
+
+// cleanest solution using intersection
+type MyReadonly2<T, K extends keyof T = keyof T> = Omit<T, K> & Readonly<T>;
 
 
-// this doesn't work because optional property is not preserved
+// this doesn't work because optional property is not preserved when modifying
 type IncorrectReadonly2<T, K extends keyof T = keyof T> = { readonly [RoP in Extract<keyof T,K>]: T[RoP] } & { [P in Exclude<keyof T, K>]: T[P] }
 
-type a = MyReadonly2<Todo1, 'title' | 'description'>
+type a = Prettier<MyReadonly2<Todo1, 'title' | 'description'>>
 type b = IncorrectReadonly2<Todo1, 'title' | 'description'>
 
-// cleaner solution
-// type MyReadonly2<T, K extends keyof T = keyof T> = Omit<T, K> & Readonly<T>;
+type Prettier<T> = { [P in keyof T]: T[P]}
 
 /* _____________ Test Cases _____________ */
 import type { Alike, Equal, Expect } from '@type-challenges/utils';
