@@ -36,13 +36,15 @@
 
 /* _____________ Your Code Here _____________ */
 
-// This can't possible be the best solution but hey at least it's working right now. 
-// TODO: come back to it later and try to optimize
-type DeepReadonly<T> = T extends Array<unknown>
-  ? DeepReadonlyArray<T>
-  : { readonly [P in keyof T]: T[P] extends Array<unknown> ? DeepReadonlyArray<T[P]> : T[P] extends Record<PropertyKey, unknown> ? DeepReadonly<T[P]> : T[P] }
+// initial solution, could not handle T[P] Object, Array and function independently which lead required a lot of conditions
+// type DeepReadonly<T> = T extends Array<unknown>
+//   ? DeepReadonlyArray<T>
+//   : { readonly [P in keyof T]: T[P] extends Array<unknown> ? DeepReadonlyArray<T[P]> : T[P] extends Record<PropertyKey, unknown> ? DeepReadonly<T[P]> : T[P] }
 
-type DeepReadonlyArray<T> = T extends [infer H, ...infer X] ? readonly [H extends Record<PropertyKey,any> ? DeepReadonly<H> : H, ...DeepReadonlyArray<X>] : T
+// type DeepReadonlyArray<T> = T extends [infer H, ...infer X] ? readonly [H extends Record<PropertyKey,any> ? DeepReadonly<H> : H, ...DeepReadonlyArray<X>] : T
+
+// clean solution, keyof T[P] extends never, can filter out primitives and Functions
+type DeepReadonly<T> = { readonly [P in keyof T]: keyof T[P] extends never ? T[P] : DeepReadonly<T[P]> }
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
