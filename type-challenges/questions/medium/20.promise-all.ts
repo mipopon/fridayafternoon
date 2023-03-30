@@ -23,7 +23,7 @@
 
 /* _____________ Your Code Here _____________ */
 
-declare function PromiseAll<T extends readonly any[]> (values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>
+declare function PromiseAll<T extends readonly any[]> (values: readonly [...T]): Promise<{ [P in keyof T]: Awaited<T[P]> }>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
