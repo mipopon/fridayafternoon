@@ -23,16 +23,15 @@
 
 /* _____________ Your Code Here _____________ */
 
-type AppendArgument<Fn extends (...args: any[]) => any, A> = 
-  Fn extends (a: infer a, b: infer b) => any 
-    ? Equal<[a: a, b: b], Parameters<Fn>> extends true 
-      ? (a: a, b: b, x: A) => ReturnType<Fn>
-      : (x: A) => ReturnType<Fn>
-    : never
+// fake answer. Doesn't actually fulfill the requirements. Just tailored to the test cases
+// type AppendArgument<Fn extends (...args: any[]) => any, A> = 
+//   Fn extends (a: infer a, b: infer b) => any 
+//     ? Equal<[a: a, b: b], Parameters<Fn>> extends true 
+//       ? (a: a, b: b, x: A) => ReturnType<Fn>
+//       : (x: A) => ReturnType<Fn>
+//     : never
 
-type test = (a: number, b: string) => number
-type a = Parameters<test> extends [a: unknown, b: unknown] ? true : false
-type b = {[P in keyof a]: a[P]}
+type AppendArgument<Fn extends (...args: any[]) => any, A> = Fn extends (...args: infer Args) => infer Res ? (...args: [...Args, A]) => Res : never
 
 
 /* _____________ Test Cases _____________ */
