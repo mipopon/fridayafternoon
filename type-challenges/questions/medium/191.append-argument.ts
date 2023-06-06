@@ -33,7 +33,6 @@
 
 type AppendArgument<Fn extends (...args: any[]) => any, A> = Fn extends (...args: infer Args) => infer Res ? (...args: [...Args, A]) => Res : never
 
-
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
