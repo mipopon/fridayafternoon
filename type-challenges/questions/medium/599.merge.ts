@@ -30,7 +30,7 @@
 // basic answer always works
 // type Merge<F, S> = { [K in (keyof F | keyof S)]: K extends keyof S ? S[K] : F[K & keyof F] }
 
-type Merge<F, S> = Prettify<Omit<F, keyof S> & S>; // Equal function can't evaluate properly unless resolved with prettify
+type Merge<F, S> = Prettify<Omit<F, keyof S> & S>; // Equal type can't evaluate properly unless resolved with prettify
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect, Prettify } from '@type-challenges/utils'
