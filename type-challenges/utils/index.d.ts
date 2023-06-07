@@ -27,3 +27,8 @@ export type ExpectValidArgs<FUNC extends (...args: any[]) => any, ARGS extends a
   : false
 
 export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never
+
+// custom util resolves intersection types
+export type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & NonNullable<unknown>;
