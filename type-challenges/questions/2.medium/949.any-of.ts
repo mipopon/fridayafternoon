@@ -19,7 +19,8 @@
 
 /* _____________ Your Code Here _____________ */
 
-type AnyOf<T extends readonly any[]> = any
+type Falsy = false | 0 | '' | [] | undefined | null | Record<PropertyKey, never>
+type AnyOf<T extends readonly any[]> = Exclude<T[number], Falsy>['length'] extends 0 ? false : true
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -35,6 +36,7 @@ type cases = [
   Expect<Equal<AnyOf<[0, '', false, [], { name: 'test' }, { 1: 'test' }]>, true>>,
   Expect<Equal<AnyOf<[0, '', false, [], {}, undefined, null]>, false>>,
   Expect<Equal<AnyOf<[]>, false>>,
+  Expect<Equal<AnyOf<[0, '', false, [], {}, undefined, null, '1']>, true>>,
 ]
 
 /* _____________ Further Steps _____________ */
